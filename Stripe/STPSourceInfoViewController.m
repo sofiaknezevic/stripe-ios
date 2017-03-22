@@ -97,7 +97,7 @@
                 dataSource = [[STPSourceInfoDataSource alloc] init];
                 break;
         }
-        self.dataSource = dataSource;
+        _dataSource = dataSource;
         self.title = dataSource.title;
     }
     return self;

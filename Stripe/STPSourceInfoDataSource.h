@@ -11,9 +11,9 @@
 
 @interface STPSourceInfoDataSource : NSObject
 
-@property(nonatomic)NSString *title;
-@property(nonatomic)STPSourceParams *sourceParams;
-@property(nonatomic)NSArray<STPTextFieldTableViewCell *>*cells;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic) STPSourceParams *sourceParams;
+@property (nonatomic, copy) NSArray<STPTextFieldTableViewCell *>*cells;
 
 - (instancetype)initWithSourceParams:(STPSourceParams *)sourceParams;
 - (STPSourceParams *)completeSourceParams;
