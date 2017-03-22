@@ -36,13 +36,13 @@
 - (void)setContents:(NSString *)contents {
     _contents = contents;
     self.textField.validText = self.textValidationBlock(contents, NO);
-    NSInteger index = [self.pickerDataSource indexOfValue:contents];
+    NSInteger index = [self.pickerDataSource indexOfPickerValue:contents];
     if (index == NSNotFound) {
         self.textField.text = @"";
     }
     else {
         [self.pickerView selectRow:index inComponent:0 animated:NO];
-        self.textField.text = [self.pickerDataSource titleForRow:index];
+        self.textField.text = [self.pickerDataSource pickerTitleForRow:index];
     }
 }
 
@@ -52,15 +52,15 @@
     if (!self.pickerDataSource) {
         return;
     }
-    self.contents = [self.pickerDataSource valueForRow:row];
-    self.textField.text = [self.pickerDataSource titleForRow:row];
+    self.contents = [self.pickerDataSource pickerValueForRow:row];
+    self.textField.text = [self.pickerDataSource pickerTitleForRow:row];
 }
 
 - (NSString *)pickerView:(__unused UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(__unused NSInteger)component {
     if (!self.pickerDataSource) {
         return @"";
     }
-    return [self.pickerDataSource titleForRow:row];
+    return [self.pickerDataSource pickerTitleForRow:row];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(__unused UIPickerView *)pickerView {
@@ -71,7 +71,7 @@
     if (!self.pickerDataSource) {
         return 0;
     }
-    return [self.pickerDataSource numberOfRows];
+    return [self.pickerDataSource numberOfRowsInPicker];
 }
 
 @end

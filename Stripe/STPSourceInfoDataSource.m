@@ -20,8 +20,8 @@
     return self;
 }
 
-- (STPSourceParams *)completedSourceParams {
-    return self.sourceParams;
+- (STPSourceParams *)completeSourceParams {
+    return nil;
 }
 
 @end

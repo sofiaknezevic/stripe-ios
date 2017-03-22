@@ -27,7 +27,7 @@
     return self;
 }
 
-- (STPSourceParams *)completedSourceParams {
+- (STPSourceParams *)completeSourceParams {
     STPSourceParams *params = [self.sourceParams copy];
     NSMutableDictionary *owner = [NSMutableDictionary new];
     if (params.owner) {
@@ -36,7 +36,12 @@
     STPTextFieldTableViewCell *nameCell = [self.cells stp_boundSafeObjectAtIndex:0];
     owner[@"name"] = nameCell.contents;
     params.owner = owner;
-    return params;
+
+    NSString *name = params.owner[@"name"];
+    if (name.length > 0) {
+        return params;
+    }
+    return nil;
 }
 
 @end

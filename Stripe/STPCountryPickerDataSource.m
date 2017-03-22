@@ -54,20 +54,20 @@
     }
 }
 
-- (NSInteger)numberOfRows {
+- (NSInteger)numberOfRowsInPicker {
     return [self.countryCodes count];
 }
 
-- (NSInteger)indexOfValue:(NSString *)value {
+- (NSInteger)indexOfPickerValue:(NSString *)value {
     return [self.countryCodes indexOfObject:value];
 }
 
-- (NSString *)valueForRow:(NSInteger)row {
+- (NSString *)pickerValueForRow:(NSInteger)row {
     NSString *countryCode = [self.countryCodes stp_boundSafeObjectAtIndex:row];
     return countryCode ?: @"";
 }
 
-- (NSString *)titleForRow:(NSInteger)row {
+- (NSString *)pickerTitleForRow:(NSInteger)row {
     NSString *displayName;
     NSString *countryCode = [self.countryCodes stp_boundSafeObjectAtIndex:row];
     if (countryCode) {

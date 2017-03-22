@@ -18,7 +18,7 @@
 - (instancetype)initWithSourceParams:(STPSourceParams *)sourceParams {
     self = [super initWithSourceParams:sourceParams];
     if (self) {
-        self.title = STPLocalizedString(@"Giropay Info", @"Title for form to collect Giropay account info");
+        self.title = STPLocalizedString(@"Sofort Info", @"Title for form to collect Sofort account info");
         STPPickerTableViewCell *countryCell = [[STPPickerTableViewCell alloc] init];
         countryCell.placeholder = STPLocalizedString(@"Country", @"Caption for Country field on bank info form");
         NSArray *sofortCountries = @[@"AT", @"BE", @"FR", @"DE", @"NL"];
@@ -32,7 +32,7 @@
     return self;
 }
 
-- (STPSourceParams *)completedSourceParams {
+- (STPSourceParams *)completeSourceParams {
     STPSourceParams *params = [self.sourceParams copy];
     NSMutableDictionary *additionalParams = [NSMutableDictionary new];
     if (params.additionalAPIParameters) {
@@ -46,7 +46,12 @@
     sofortDict[@"country"] = countryCell.contents;
     additionalParams[@"sofort"] = sofortDict;
     params.additionalAPIParameters = additionalParams;
-    return params;
+
+    NSString *country = params.additionalAPIParameters[@"sofort"][@"country"];
+    if (country.length > 0) {
+        return params;
+    }
+    return nil;
 }
 
 @end

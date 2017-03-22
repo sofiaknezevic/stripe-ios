@@ -18,7 +18,7 @@
 - (instancetype)initWithSourceParams:(STPSourceParams *)sourceParams {
     self = [super initWithSourceParams:sourceParams];
     if (self) {
-        self.title = STPLocalizedString(@"Giropay Info", @"Title for form to collect Giropay account info");
+        self.title = STPLocalizedString(@"iDEAL Info", @"Title for form to collect iDEAL account info");
         STPTextFieldTableViewCell *nameCell = [[STPTextFieldTableViewCell alloc] init];
         nameCell.placeholder = STPLocalizedString(@"Name", @"Caption for Name field on bank info form");
         if (self.sourceParams.owner) {
@@ -36,7 +36,7 @@
     return self;
 }
 
-- (STPSourceParams *)completedSourceParams {
+- (STPSourceParams *)completeSourceParams {
     STPSourceParams *params = [self.sourceParams copy];
     NSMutableDictionary *owner = [NSMutableDictionary new];
     if (params.owner) {
@@ -57,7 +57,13 @@
     idealDict[@"bank"] = bankCell.contents;
     additionalParams[@"ideal"] = idealDict;
     params.additionalAPIParameters = additionalParams;
-    return params;
+
+    NSString *name = params.owner[@"name"];
+    NSString *bank = params.additionalAPIParameters[@"ideal"][@"bank"];
+    if (name.length > 0 && bank.length > 0) {
+        return params;
+    }
+    return nil;
 }
 
 @end

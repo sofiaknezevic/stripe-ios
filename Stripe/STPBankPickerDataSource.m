@@ -40,11 +40,11 @@
     return dataSource;
 }
 
-- (NSInteger)numberOfRows {
+- (NSInteger)numberOfRowsInPicker {
     return [self.bankNames count];
 }
 
-- (NSInteger)indexOfValue:(NSString *)value {
+- (NSInteger)indexOfPickerValue:(NSString *)value {
     NSString *name = [[self.bankNameToBankCode allKeysForObject:value] firstObject];
     if (!name) {
         return NSNotFound;
@@ -52,7 +52,7 @@
     return [self.bankNames indexOfObject:name];
 }
 
-- (NSString *)valueForRow:(NSInteger)row {
+- (NSString *)pickerValueForRow:(NSInteger)row {
     NSString *value;
     NSString *name = [self.bankNames stp_boundSafeObjectAtIndex:row];
     if (name) {
@@ -61,7 +61,7 @@
     return value ?: @"";
 }
 
-- (NSString *)titleForRow:(NSInteger)row {
+- (NSString *)pickerTitleForRow:(NSInteger)row {
     NSString *title = [self.bankNames stp_boundSafeObjectAtIndex:row];
     return title ?: @"";
 }

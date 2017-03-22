@@ -20,10 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol STPPickerDataSource <NSObject>
 
-- (NSInteger)numberOfRows;
-- (NSInteger)indexOfValue:(NSString *)value;
-- (NSString *)valueForRow:(NSInteger)row;
-- (NSString *)titleForRow:(NSInteger)row;
+- (NSInteger)numberOfRowsInPicker;
+- (NSInteger)indexOfPickerValue:(NSString *)value;
+- (NSString *)pickerValueForRow:(NSInteger)row;
+- (NSString *)pickerTitleForRow:(NSInteger)row;
 
 @end
 

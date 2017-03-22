@@ -48,18 +48,42 @@
     }
 }
 
-- (instancetype)initWithSourceParams:(STPSourceParams *)sourceParams
-                               theme:(STPTheme *)theme {
+- (nullable instancetype)initWithSourceType:(STPSourceType)type
+                                     amount:(NSInteger)amount
+                              configuration:(__unused STPPaymentConfiguration *)configuration
+                       prefilledInformation:(STPUserInformation *)prefilledInformation
+                                      theme:(STPTheme *)theme {
     self = [super initWithTheme:theme];
-    if (![[self class] canCollectInfoForSourceType:sourceParams.type]) {
+    if (![[self class] canCollectInfoForSourceType:type]) {
         return nil;
     }
     if (self) {
         STPSourceInfoDataSource *dataSource;
-        switch (sourceParams.type) {
-            case STPSourceTypeBancontact:
+        STPSourceParams *sourceParams = [STPSourceParams new];
+        sourceParams.type = type;
+        sourceParams.currency = @"eur";
+        sourceParams.amount = @(amount);
+        // TODO: get returnURL from STPPaymentConfiguration
+        if (prefilledInformation.billingAddress.name &&
+            (type == STPSourceTypeBancontact ||
+             type == STPSourceTypeGiropay ||
+             type == STPSourceTypeIDEAL))
+        {
+            NSMutableDictionary *owner = [NSMutableDictionary new];
+            owner[@"name"] = prefilledInformation.billingAddress.name;
+            sourceParams.owner = owner;
+        }
+        if (prefilledInformation.billingAddress.country && type == STPSourceTypeSofort) {
+            NSMutableDictionary *sofortDict = [NSMutableDictionary new];
+            sofortDict[@"country"] = prefilledInformation.billingAddress.country;
+            sourceParams.additionalAPIParameters = @{@"sofort": sofortDict};
+        }
+        // TODO: prefill idealBank from STPUserInformation
+        switch (type) {
+            case STPSourceTypeBancontact: {
                 dataSource = [[STPBancontactSourceInfoDataSource alloc] initWithSourceParams:sourceParams];
                 break;
+            }
             case STPSourceTypeGiropay:
                 dataSource = [[STPGiropaySourceInfoDataSource alloc] initWithSourceParams:sourceParams];
                 break;
@@ -77,6 +101,10 @@
         self.title = dataSource.title;
     }
     return self;
+}
+
+- (STPSourceParams *)completeSourceParams {
+    return self.dataSource.completeSourceParams;
 }
 
 - (void)createAndSetupViews {
@@ -139,7 +167,7 @@
 }
 
 - (void)nextPressed:(__unused id)sender {
-    STPSourceParams *params = [self.dataSource completedSourceParams];
+    STPSourceParams *params = [self.dataSource completeSourceParams];
     [self.delegate sourceInfoViewController:self
                   didFinishWithSourceParams:params];
 }
@@ -149,11 +177,7 @@
 }
 
 - (BOOL)validContents {
-    BOOL valid = YES;
-    for (STPTextFieldTableViewCell *cell in self.dataSource.cells) {
-        valid = valid && cell.isValid;
-    }
-    return valid;
+    return self.dataSource.completeSourceParams != nil;
 }
 
 - (STPTextFieldTableViewCell *)cellBeforeCell:(STPTextFieldTableViewCell *)cell {

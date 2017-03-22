@@ -16,6 +16,6 @@
 @property(nonatomic)NSArray<STPTextFieldTableViewCell *>*cells;
 
 - (instancetype)initWithSourceParams:(STPSourceParams *)sourceParams;
-- (STPSourceParams *)completedSourceParams;
+- (STPSourceParams *)completeSourceParams;
 
 @end
